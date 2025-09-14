@@ -1,11 +1,14 @@
-import torchaudio
 from audiocraft.models import MusicGen
 from audiocraft.data.audio import audio_write
-import streamlit as st 
-import scipy
-import pdb
 
-print("LOaded")
+def generate_music(prompt_text):
+    model = MusicGen.get_pretrained('facebook/musicgen-small')
+    model.set_generation_params(duration=10)  # Durée en secondes
+    output = model.generate([prompt_text])
+    audio_path = "static/generated_music"
+    audio_write(audio_path, output[0].cpu(), model.sample_rate)
+    return audio_path + ".wav"
+
 
 
 @st.cache_resource
